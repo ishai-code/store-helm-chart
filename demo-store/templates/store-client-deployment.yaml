@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Values.name}}-client-deployment
+  namespace: {{.Values.namespace}}
+  labels:
+    app: {{.Values.name}}-client
+spec:
+  replicas: {{.Values.deployment.client.replicas}}
+  selector:
+    matchLabels:
+      app: {{.Values.name}}-client
+  template:
+    metadata:
+      labels:
+        app: {{.Values.name}}-client
+    spec:
+      containers:
+      - name: {{.Values.name}}-client
+        image: "{{.Values.deployment.client.image.repository}}:{{.Values.deployment.client.image.tag}}"
+        ports:
+        - containerPort: 80
+        envFrom:
+        - configMapRef:
+            name: {{.Values.name}}-client-config

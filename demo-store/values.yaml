@@ -1,0 +1,39 @@
+namespace: default
+name: store
+deployment:
+  client:
+    replicas: 1
+    image:
+      repository: isaschar/store-front
+      name: store-client
+      tag: 1.0.0
+    base_url: /store/api
+  server:
+    replicas: 1
+    image:
+      repository: isaschar/store-back
+      name: store-server
+      tag: 1.0.0
+ingress:
+  client:
+    path: /store(/|$)(.*)
+    pathType: ImplementationSpecific
+  server:
+    path: /store/api(/|$)(.*)
+    pathType: ImplementationSpecific
+mongodb:
+  global:
+    namespaceOverride: default
+  fullnameOverride: store-mongodb
+  architecture: replicaset
+  auth:
+    enabled: true
+    rootUser: root
+    rootPassword: password
+  replicaCount: 3
+  persistence:
+    size: 1Gi
+  arbiter:
+    enabled: false
+
+  
